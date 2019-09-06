@@ -11,6 +11,7 @@ import MapKit
 import CoreData
 class LocationDetailViewController: UIViewController {
     @IBOutlet weak var DetailImageView: UIImageView!
+    @IBOutlet weak var addressLabel: UILabel!
     var locationDetail: Location?
 
     @IBOutlet weak var DtitleLabel: UILabel!
@@ -21,7 +22,8 @@ class LocationDetailViewController: UIViewController {
         super.viewDidLoad()
         DtitleLabel.text = locationDetail!.title
         DsubtitleLabel.text = locationDetail!.subtitle
-        Ddescription.text = locationDetail!.descriptions 
+        Ddescription.text = locationDetail!.descriptions
+        addressLabel.text = locationDetail!.address
         DetailImageView?.image = loadImageData(fileName: (locationDetail?.image!)!)
         // Do any additional setup after loading the view.
     }

@@ -93,7 +93,6 @@ class LocationListTableTableViewController: UITableViewController, NSFetchedResu
         // Configure the cell...
         cell.titleLabel.text = locationList[indexPath.row].title
         cell.subtitleLabel.text = locationList[indexPath.row].subtitle
-        cell.addressLabel.text = locationList[indexPath.row].address
         cell.imageView?.image = UIImage(named: locationList[indexPath.row].icon!)
         return cell
     }
