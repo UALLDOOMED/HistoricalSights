@@ -9,14 +9,20 @@
 import UIKit
 import MapKit
 import CoreData
-class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsControllerDelegate{
+class MapViewController: UIViewController, DatabaseListener, MKMapViewDelegate, NSFetchedResultsControllerDelegate{
+    var listenerType = ListenerType.location
+    
+    func onLocationChange(change: DatabaseChange, locations: [Location]) {
+        self.locations = locations
+    }
+    
 
     @IBOutlet weak var mapView: MKMapView!
     weak var databaseController: DatabaseProtocol?
-    weak var coreDataController: CoreDataController?
     var fetchResultController: NSFetchedResultsController<Location>!
     var annotationList = [LocationAnnotation]()
     var locations: [Location] = []
+    var location: Location!
     let initialLocation = CLLocation(latitude: -37.8136, longitude: 144.9631)
     let regionRadius : CLLocationDistance = 2000
     override func viewDidLoad() {
@@ -28,58 +34,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         databaseController = appDelegate.databaseController
         centerMapOnLocation(location: initialLocation)
-        mapView.delegate = self
-        showAnnotations()
     }
-    func showAnnotations(){
-        let fetchRequest: NSFetchRequest<Location> = Location.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
-        fetchRequest.sortDescriptors = [sortDescriptor]
-        if let appDelegate = (UIApplication.shared.delegate as? CoreDataController) {
-            let context = appDelegate.persistantContainer.viewContext
-            fetchResultController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
-            fetchResultController.delegate = self
-            
-            do {
-                try fetchResultController.performFetch()
-                if let fetchedObjects = fetchResultController.fetchedObjects {
-                    locations = fetchedObjects
-                    for location in locations{
-                        let geoCoder = CLGeocoder()
-                        geoCoder.geocodeAddressString(location.address ?? "") { (placemarks, error) in
-                            if let error = error {
-                                print(error)
-                                return
-                            }
-                            
-                            if let placemarks = placemarks {
-                                // Get the first placemark
-                                let placemark = placemarks[0]
-                                let coordinate = placemark.location
-                                let sight = LocationAnnotation(newTitle: location.title!, newSubtitle: location.subtitle!, coordinate: coordinate!.coordinate)
-                                self.mapView.addAnnotation(sight)
-                                
-                                // Add annotation
-                                /* let annotation = MKPointAnnotation()
-                                 annotation.title = location.title
-                                 annotation.subtitle = location.subtitle
-                                 
-                                 if let location = placemark.location {
-                                 print(location.coordinate)
-                                 annotation.coordinate = location.coordinate
-                                 
-                                 // Display the annotation
-                                 self.mapView.addAnnotation(annotation)*/
-                                //self.mapView.selectAnnotation(annotation, animated: true)
-                            }
-                        }
-                    }
-                }
-            } catch {
-                print(error)
-            }
-        }
-    }
+    
     func centerMapOnLocation(location:CLLocation){
         let coordinateRegion = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
         mapView.setRegion(coordinateRegion, animated: true)
@@ -87,12 +43,47 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     @IBAction func unwindToHome(segue: UIStoryboardSegue) {
         dismiss(animated: true, completion: nil)
     }
+    override func viewWillAppear(_ animated: Bool) {
+        mapView.register(AnnotationMarkerView.self,
+                              forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
+        databaseController?.addListener(listener: self)
+        for location in locations{
+            let annotation = LocationAnnotation(newTitle: location.title!, newSubtitle: location.subtitle!, latitude: location.latitude, longitude: location.longitude,icon: location.icon!)
+
+            self.mapView.addAnnotation(annotation)
+        }
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        databaseController?.removeListener(listener: self)
+    }
     
     // Do any additional setup after loading the view.
         // Do any additional setup after loading the view.
     }
     
+extension MapViewController{
 
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+       
+        guard let annotation = annotation as? LocationAnnotation else { return nil }
+      
+        let identifier = "marker"
+        var view: MKMarkerAnnotationView
+       
+        if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+            as? MKMarkerAnnotationView {
+            dequeuedView.annotation = annotation
+            view = dequeuedView
+        } else {
+           
+            view = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            view.canShowCallout = true
+            view.calloutOffset = CGPoint(x: -5, y: 5)
+            view.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+        }
+        return view
+    }
+}
     /*
     // MARK: - Navigation
 

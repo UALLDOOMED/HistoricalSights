@@ -16,6 +16,8 @@ class NewLocationTableViewController: UITableViewController, UITextFieldDelegate
     var mapViewController: MapViewController?
     var managedObjectContext: NSManagedObjectContext?
     var selectedSegment: String!
+    @IBOutlet weak var longitudeTextField: UITextField!
+    @IBOutlet weak var latitudeTextField: UITextField!
     @IBOutlet weak var segmentControl: UISegmentedControl!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var titleTextField: UITextField!
@@ -45,8 +47,9 @@ class NewLocationTableViewController: UITableViewController, UITextFieldDelegate
                 displayMessage("Could not save to database", "Error")
             }
         }
-        if titleTextField.text == "" || subtitleTextField.text == "" || addressTextField.text == "" || descriptionTextField.text == "" {
-            let alertController = UIAlertController(title: "Oops", message: "We can't proceed because one of the fields is blank. Please note that all fields are required.", preferredStyle: .alert)
+        
+        if titleTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || subtitleTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || addressTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || descriptionTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || latitudeTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || longitudeTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+            let alertController = UIAlertController(title: "Oops", message: "Please note that all fields are required.", preferredStyle: .alert)
             let alertAction = UIAlertAction(title: "OK", style: .default, handler: nil)
             alertController.addAction(alertAction)
             
@@ -64,7 +67,7 @@ class NewLocationTableViewController: UITableViewController, UITextFieldDelegate
             selectedSegment = "icons8-skyscrapers-30"
         default:
             selectedSegment = "icons8-building-30"
-            let _ = databaseController!.addLocation(title: titleTextField.text!, subtitle: subtitleTextField.text!, descriptions: descriptionTextField.text!, address: addressTextField.text!, image: filename, icon: selectedSegment)
+            let _ = databaseController!.addLocation(title: titleTextField.text!, subtitle: subtitleTextField.text!, descriptions: descriptionTextField.text!, address: addressTextField.text!, image: filename, icon: selectedSegment, latitude: (latitudeTextField!.text! as NSString).doubleValue, longitude: (longitudeTextField!.text! as NSString).doubleValue)
         }
         dismiss(animated: true, completion: nil)
     }
@@ -76,6 +79,7 @@ class NewLocationTableViewController: UITableViewController, UITextFieldDelegate
         dismiss(animated: true, completion: nil)
     }
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
         displayMessage("There was an error in getting the image", "Error")
     }
     func displayMessage(_ message: String,_ title: String) {

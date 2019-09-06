@@ -19,10 +19,10 @@
 		274255F42321496800F3E5D3 /* DatabaseProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274255F32321496800F3E5D3 /* DatabaseProtocol.swift */; };
 		274255F6232149A100F3E5D3 /* CoreDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274255F5232149A100F3E5D3 /* CoreDataController.swift */; };
 		274255F8232149BF00F3E5D3 /* MulticastDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274255F7232149BF00F3E5D3 /* MulticastDelegate.swift */; };
-		274255FB23214B0000F3E5D3 /* Location+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274255F923214B0000F3E5D3 /* Location+CoreDataClass.swift */; };
-		274255FC23214B0000F3E5D3 /* Location+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274255FA23214B0000F3E5D3 /* Location+CoreDataProperties.swift */; };
 		274255FE23214C9F00F3E5D3 /* LocationDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274255FD23214C9F00F3E5D3 /* LocationDetailViewController.swift */; };
 		274256002321970900F3E5D3 /* LocationAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274255FF2321970900F3E5D3 /* LocationAnnotation.swift */; };
+		2742560323224CD900F3E5D3 /* Location+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2742560123224CD900F3E5D3 /* Location+CoreDataClass.swift */; };
+		2742560423224CD900F3E5D3 /* Location+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2742560223224CD900F3E5D3 /* Location+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,10 +40,10 @@
 		274255F32321496800F3E5D3 /* DatabaseProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseProtocol.swift; sourceTree = "<group>"; };
 		274255F5232149A100F3E5D3 /* CoreDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataController.swift; sourceTree = "<group>"; };
 		274255F7232149BF00F3E5D3 /* MulticastDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MulticastDelegate.swift; sourceTree = "<group>"; };
-		274255F923214B0000F3E5D3 /* Location+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location+CoreDataClass.swift"; sourceTree = "<group>"; };
-		274255FA23214B0000F3E5D3 /* Location+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		274255FD23214C9F00F3E5D3 /* LocationDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailViewController.swift; sourceTree = "<group>"; };
 		274255FF2321970900F3E5D3 /* LocationAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationAnnotation.swift; sourceTree = "<group>"; };
+		2742560123224CD900F3E5D3 /* Location+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location+CoreDataClass.swift"; sourceTree = "<group>"; };
+		2742560223224CD900F3E5D3 /* Location+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,8 +97,8 @@
 		274255EB232148E000F3E5D3 /* DataModel */ = {
 			isa = PBXGroup;
 			children = (
-				274255F923214B0000F3E5D3 /* Location+CoreDataClass.swift */,
-				274255FA23214B0000F3E5D3 /* Location+CoreDataProperties.swift */,
+				2742560123224CD900F3E5D3 /* Location+CoreDataClass.swift */,
+				2742560223224CD900F3E5D3 /* Location+CoreDataProperties.swift */,
 			);
 			path = DataModel;
 			sourceTree = "<group>";
@@ -184,10 +184,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2742560323224CD900F3E5D3 /* Location+CoreDataClass.swift in Sources */,
 				274255F12321493900F3E5D3 /* LocationTableViewCell.swift in Sources */,
 				274256002321970900F3E5D3 /* LocationAnnotation.swift in Sources */,
 				274255EF2321491A00F3E5D3 /* NewLocationTableViewController.swift in Sources */,
-				274255FC23214B0000F3E5D3 /* Location+CoreDataProperties.swift in Sources */,
+				2742560423224CD900F3E5D3 /* Location+CoreDataProperties.swift in Sources */,
 				274255F6232149A100F3E5D3 /* CoreDataController.swift in Sources */,
 				274255FE23214C9F00F3E5D3 /* LocationDetailViewController.swift in Sources */,
 				274255DD2321479400F3E5D3 /* HistoricalSights.xcdatamodeld in Sources */,
@@ -195,7 +196,6 @@
 				274255EA232148D700F3E5D3 /* MapViewController.swift in Sources */,
 				274255D52321479400F3E5D3 /* AppDelegate.swift in Sources */,
 				274255F42321496800F3E5D3 /* DatabaseProtocol.swift in Sources */,
-				274255FB23214B0000F3E5D3 /* Location+CoreDataClass.swift in Sources */,
 				274255F8232149BF00F3E5D3 /* MulticastDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
