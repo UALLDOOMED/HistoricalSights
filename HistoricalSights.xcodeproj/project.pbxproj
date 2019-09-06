@@ -62,6 +62,7 @@
 			children = (
 				274255D32321479400F3E5D3 /* HistoricalSights */,
 				274255D22321479400F3E5D3 /* Products */,
+				274256052322886300F3E5D3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -113,6 +114,13 @@
 			path = Database;
 			sourceTree = "<group>";
 		};
+		274256052322886300F3E5D3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -145,6 +153,11 @@
 				TargetAttributes = {
 					274255D02321479400F3E5D3 = {
 						CreatedOnToolsVersion = 10.3;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};

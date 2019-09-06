@@ -20,11 +20,7 @@ class LocationListTableTableViewController: UITableViewController, NSFetchedResu
         super.viewDidLoad()
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         databaseController = appDelegate.databaseController
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Search Locations"
-        navigationItem.searchController = searchController
-        definesPresentationContext = true
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -38,7 +34,7 @@ class LocationListTableTableViewController: UITableViewController, NSFetchedResu
     
     func filterContentForSearchText(_ searchText: String, scope: String = "All") {
         filteredLocations = locationList.filter({( location : Location) -> Bool in
-            return location.title!.lowercased().contains(searchText.lowercased())
+            return location.title!.contains(searchText)
         })
         tableView.reloadData()
     }
@@ -53,16 +49,20 @@ class LocationListTableTableViewController: UITableViewController, NSFetchedResu
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         databaseController?.addListener(listener: self)
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search Locations"
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
+        updateSearchResults(for: navigationItem.searchController!)
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
-        // #warning Incomplete implementation, return the number of sections
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -87,12 +87,15 @@ class LocationListTableTableViewController: UITableViewController, NSFetchedResu
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
-        let cellIdentifier = "Cell"
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! LocationTableViewCell
-        
-        // Configure the cell...
-        cell.titleLabel.text = locationList[indexPath.row].title
-        cell.subtitleLabel.text = locationList[indexPath.row].subtitle
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! LocationTableViewCell
+        let location : Location
+        if isFiltering() {
+            location = filteredLocations[indexPath.row]
+        } else {
+            location = locationList[indexPath.row]
+        }
+        cell.titleLabel.text = location.title
+        cell.subtitleLabel.text = location.subtitle
         cell.imageView?.image = UIImage(named: locationList[indexPath.row].icon!)
         return cell
     }
@@ -109,7 +112,6 @@ class LocationListTableTableViewController: UITableViewController, NSFetchedResu
     var listenerType = ListenerType.location
     func onLocationChange(change: DatabaseChange, locations: [Location]) {
         locationList = locations
-        updateSearchResults(for: navigationItem.searchController!)
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetail" {

@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 import CoreData
-class MapViewController: UIViewController, DatabaseListener, MKMapViewDelegate, NSFetchedResultsControllerDelegate{
+class MapViewController: UIViewController, DatabaseListener, MKMapViewDelegate, NSFetchedResultsControllerDelegate, CLLocationManagerDelegate{
     var listenerType = ListenerType.location
     
     func onLocationChange(change: DatabaseChange, locations: [Location]) {
@@ -28,9 +28,6 @@ class MapViewController: UIViewController, DatabaseListener, MKMapViewDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
-        mapView.showsTraffic = true
-        mapView.showsScale = true
-        mapView.showsCompass = true
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         databaseController = appDelegate.databaseController
         centerMapOnLocation(location: initialLocation)
@@ -55,6 +52,13 @@ class MapViewController: UIViewController, DatabaseListener, MKMapViewDelegate, 
     }
     override func viewWillDisappear(_ animated: Bool) {
         databaseController?.removeListener(listener: self)
+    }
+    
+    func focusOn(annotation: MKAnnotation) {
+        mapView.selectAnnotation(annotation, animated: true)
+        let zoomRegion = MKCoordinateRegion(center: annotation.coordinate, latitudinalMeters: 1000,
+                                            longitudinalMeters: 1000)
+        mapView.setRegion(mapView.regionThatFits(zoomRegion), animated: true)
     }
     
     // Do any additional setup after loading the view.

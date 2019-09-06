@@ -13,7 +13,6 @@ class LocationDetailViewController: UIViewController {
     @IBOutlet weak var DetailImageView: UIImageView!
     @IBOutlet weak var addressLabel: UILabel!
     var locationDetail: Location?
-
     @IBOutlet weak var DtitleLabel: UILabel!
     @IBOutlet weak var DsubtitleLabel: UILabel!
     @IBOutlet weak var Ddescription: UILabel!
@@ -25,8 +24,18 @@ class LocationDetailViewController: UIViewController {
         Ddescription.text = locationDetail!.descriptions
         addressLabel.text = locationDetail!.address
         DetailImageView?.image = loadImageData(fileName: (locationDetail?.image!)!)
+        let annotation = LocationAnnotation(newTitle: DtitleLabel.text!, newSubtitle: DsubtitleLabel.text!, latitude: locationDetail!.latitude, longitude: locationDetail!.longitude, icon: locationDetail!.icon!)
+        DmapView.addAnnotation(annotation)
+        focusOn(annotation: annotation)
         // Do any additional setup after loading the view.
     }
+    func focusOn(annotation: MKAnnotation) {
+        DmapView.selectAnnotation(annotation, animated: true)
+        let zoomRegion = MKCoordinateRegion(center: annotation.coordinate, latitudinalMeters: 1000,
+                                            longitudinalMeters: 1000)
+        DmapView.setRegion(DmapView.regionThatFits(zoomRegion), animated: true)
+    }
+    
     func loadImageData(fileName: String) -> UIImage? {
         var image: UIImage?
         if isPurnInt(string: fileName){
@@ -45,7 +54,7 @@ class LocationDetailViewController: UIViewController {
         }
         return image
     }
-    
+    // Cited from: https://blog.csdn.net/hengyunbin/article/details/85260760
     func isPurnInt(string: String) -> Bool {
         let scan: Scanner = Scanner(string: string)
         var val:Int = 0

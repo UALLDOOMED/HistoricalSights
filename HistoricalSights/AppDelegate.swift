@@ -7,15 +7,20 @@
 //
 
 import UIKit
-
+import MapKit
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate{
 
     var window: UIWindow?
     var databaseController : DatabaseProtocol?
-
+    var locationManger: CLLocationManager = CLLocationManager()
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
          databaseController = CoreDataController()
+        locationManger.desiredAccuracy = kCLLocationAccuracyBest
+        locationManger.distanceFilter = 10
+        locationManger.delegate = self
+        locationManger.requestAlwaysAuthorization()
+        locationManger.startUpdatingLocation()
         // Override point for customization after application launch.
         return true
     }
